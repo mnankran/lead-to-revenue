@@ -1,6 +1,6 @@
 -- =============================================================================
 -- facts_05_products.sql · E · Products
--- Answers F19 to F21 in docs/data-context.md
+-- Answers F19 and F20 in docs/data-context.md
 -- Source: bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_*
 -- Model: see facts_01_scope.sql (F01–F02)
 -- =============================================================================
@@ -26,16 +26,6 @@
 -- -----------------------------------------------------------------------------
 -- your query here
 
-
--- -----------------------------------------------------------------------------
--- F21 · Entry products
--- Question: How many distinct products appear in a user's first purchase?
--- Hint: ROW_NUMBER() or QUALIFY to find each user's first purchase (S3 window functions).
--- Finding:
--- Bytes processed:
--- Run on:
--- -----------------------------------------------------------------------------
--- your query here
 
 -- -----------------------------------------------------------------------------
 -- Top 10 products by revenue (table in data-context.md, section 5.5)

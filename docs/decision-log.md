@@ -35,7 +35,16 @@ The first decision of the project, the data source, is recorded in
 **Forced by:** Finding 1 — 3,038 users (1.1%) never fired session_start.
 See: architecture/dataset-findings.md#finding-1
 
-### 2026-11-23 — The dataset overview is by user; the session funnel waits for Q1
+### 2026-11-23 — The dataset overview is by user; the session funnel waits for Q2
 **Forced by:** wanting general numbers first; the funnel unit is still an open decision.
+
+### 2026-11-23 — Channel is the user's first source (first touch), not the session's source
+**Forced by:** Q1 needs one channel per buyer; a buyer who arrived by Organic Search and bought from an email visit
+counts for a different channel under each rule.
+
+### 2026-11-23 — Business questions aligned with the Onda 0 card; the product question removed
+**Forced by:** reviewing the card's five starting questions: two were missing, two of mine overlapped (revenue by channel
+and revenue per lead), data trust became an extra question for now, and the product question (old Q6) was dropped,
+with its exploration fact F21 (entry products).
 
 -->

@@ -30,5 +30,5 @@
 -- -----------------------------------------------------------------------------
 -- F22 · Users per funnel step (dataset overview, user level)
 -- The query lives in facts_01_scope.sql (F05 block): one scan answers F04, F05 and F22.
--- Session-level funnel (did this visit reach the step) comes later, with Q1.
+-- Session-level funnel (did this visit reach the step) comes later, with Q2.
 -- -----------------------------------------------------------------------------

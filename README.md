@@ -14,12 +14,13 @@ to the query that produced it, and every decision recorded with the alternatives
 
 **Which channels and campaigns bring buyers, not just leads, and how long do they take to convert?**
 
-1. Where does the purchase funnel leak, by channel?
-2. Which channels and campaigns bring revenue, and at what order value?
+1. Which channels bring buyers, not just visitors?
+2. Where does the purchase funnel leak, by channel?
 3. How long from first visit to first purchase, by channel?
-4. Which channels bring leads that become buyers, and how much revenue per lead?
-5. Can we trust these numbers?
-6. Which products bring first-time buyers, and do some entry products bring buyers who come back?
+4. Which campaigns bring leads that never buy?
+5. How much revenue per lead, per source?
+
+**Extra question, for now:** can we trust these numbers?
 
 Each question is stated as the decision it supports in the [north star](docs/00-north-star.md).
 
@@ -47,7 +48,7 @@ This project is in its first phase. The table is split so that what is planned i
 |---|---|---|
 | **Dataset profile** | Period, users, sessions, event names and the funnel by user, each number traced to a query with its bytes processed: 92 days, 270,154 users, 360,129 sessions | [data-context.md](docs/data-context.md) |
 | **Data findings** | Three findings that changed the design, e.g. 1.1% of users never fired `session_start`, so sessions are counted by key | [dataset-findings.md](docs/architecture/dataset-findings.md) |
-| **Spec** | Six business questions and the requirements of the current phase (exploration) | [north star](docs/00-north-star.md) · [requirements](specs/REQUIREMENTS.md) |
+| **Spec** | Five business questions plus an extra one on data trust, and the requirements of the current phase (exploration) | [north star](docs/00-north-star.md) · [requirements](specs/REQUIREMENTS.md) |
 
 **Not built.** Named rather than implied:
 
@@ -55,7 +56,7 @@ This project is in its first phase. The table is split so that what is planned i
 |---|---|
 | Bronze, silver and gold layers | Designed on paper next ([layer-design.md](docs/architecture/layer-design.md)) |
 | Channel definition | Open decision: user-level first source vs. session-level source |
-| Synthetic CRM leads (Q4) | Planned for December 2026, generated in Python |
+| Synthetic CRM leads (Q4, Q5) | Planned for December 2026, generated in Python |
 | dbt models and data tests | Planned from February 2027 |
 | Looker Studio dashboard | Planned |
 | CI (GitHub Actions) | Planned |
@@ -72,7 +73,7 @@ This project is in its first phase. The table is split so that what is planned i
 
 Read in this order.
 
-1. **[docs/00-north-star.md](docs/00-north-star.md)** — the six business questions, stated as the decisions they support,
+1. **[docs/00-north-star.md](docs/00-north-star.md)** — the five business questions (plus the extra one on data trust), stated as the decisions they support,
    with caveats and non-goals.
 2. **[docs/data-context.md](docs/data-context.md)** — the dataset in plain words: every concept and metric explained,
    and the measured numbers. Start here if you are new to GA4.
@@ -93,13 +94,13 @@ Read in this order.
 Part of the values are obfuscated by Google (sources, campaigns, products), so some findings describe the sample,
 not the real store.
 
-GA4 has no leads. Q4 (leads that become buyers) uses a **synthetic CRM leads table**, dirty on purpose,
+GA4 has no leads. Q4 and Q5 (leads that never buy, revenue per lead) use a **synthetic CRM leads table**, dirty on purpose,
 generated in Python. Its findings test the pipeline (deduplication, identity matching), not a real market.
 
 Limits stated up front:
 
 - **No cost data:** no CAC, no ROAS.
-- **92 days only:** time to purchase is biased for users who arrived late, and repeat purchase may be too rare (Q6).
+- **92 days only:** time to purchase is biased for users who arrived late.
 - **Users are not people:** `user_pseudo_id` is a browser cookie, so cross-device journeys split into several users.
 
 ---

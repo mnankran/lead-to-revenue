@@ -20,7 +20,7 @@
 | EXP-002 | MUST | Profile traffic sources | Facts F07–F10 filled, same rule |
 | EXP-003 | MUST | Profile the funnel | Facts F11, F12, F22 filled, same rule |
 | EXP-004 | MUST | Profile purchases | Facts F13–F18 filled, same rule |
-| EXP-005 | SHOULD | Profile products | Facts F19–F21 filled, same rule |
+| EXP-005 | SHOULD | Profile products | Facts F19–F20 filled, same rule |
 
 ---
 
@@ -31,11 +31,11 @@ when its phase starts.
 
 | Domain | What it will cover | Serves | Phase |
 |---|---|---|---|
-| MOD — Modelling | Tables of the bronze, silver and gold layers, with their grain | Q1–Q6 | After the layer design ([layer-design.md](../docs/architecture/layer-design.md)) |
-| MET — Metrics | One deliverable per business question | Q1–Q4, Q6 | After the modelling |
-| QLT — Quality | The trust checks | Q5 | Alongside the modelling |
-| CRM — Leads | The synthetic CRM leads table | Q4 | December 2026 |
-| DSH — Dashboard | The Looker Studio dashboard | Q1–Q6 | After the metrics |
+| MOD — Modelling | Tables of the bronze, silver and gold layers, with their grain | Q1–Q5, Extra | After the layer design ([layer-design.md](../docs/architecture/layer-design.md)) |
+| MET — Metrics | One deliverable per business question | Q1–Q5 | After the modelling |
+| QLT — Quality | The trust checks | Extra (data trust) | Alongside the modelling |
+| CRM — Leads | The synthetic CRM leads table | Q4, Q5 | December 2026 |
+| DSH — Dashboard | The Looker Studio dashboard | Q1–Q5, Extra | After the metrics |
 
 ---
 

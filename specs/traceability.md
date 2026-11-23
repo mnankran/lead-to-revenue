@@ -14,7 +14,7 @@ evidence not yet produced) · `WAIVED` (not possible with this data; the reason 
 | EXP-002 | `sql/exploration/facts_02_traffic.sql::F07-F10` | exploration | PLANNED |
 | EXP-003 | `sql/exploration/facts_03_funnel.sql::F11,F12,F22` | exploration | PLANNED |
 | EXP-004 | `sql/exploration/facts_04_purchases.sql::F13-F18` | exploration | PLANNED |
-| EXP-005 | `sql/exploration/facts_05_products.sql::F19-F21` | exploration | PLANNED |
+| EXP-005 | `sql/exploration/facts_05_products.sql::F19-F20` | exploration | PLANNED |
 
 ## Notes
 

@@ -24,27 +24,28 @@
 
 Each question exists because someone has to decide something with the answer.
 
+<!-- Q1 to Q5 follow the order of the Onda 0 card (2026-11-23). -->
 <!-- "Cost of being wrong": fill in, in your own words, what goes wrong for the business if the answer is wrong. -->
 
 | # | Question | Who asks | Decision it supports | Cost of being wrong |
 |---|---|---|---|---|
-| Q1 | Where does the purchase funnel leak, by channel? | Growth / CRO manager | Fix the product page, the checkout or the payment step |  |
-| Q2 | Which channels and campaigns bring revenue, and at what order value? | Head of marketing | How to split the budget across channels |  |
+| Q1 | Which channels bring buyers, not just visitors? | Head of marketing / paid media manager | Which channels to scale or cut by the buyers they bring, not by their traffic volume |  |
+| Q2 | Where does the purchase funnel leak, by channel? | Growth / CRO manager | Fix the product page, the checkout or the payment step |  |
 | Q3 | How long from first visit to first purchase, by channel? | CRM / lifecycle team | How long nurturing should last; which attribution window to use |  |
-| Q4 | Which channels bring leads that become buyers? | Head of marketing and sales | Cut channels that only bring cheap leads |  |
-| Q5 | Can we trust these numbers? | Analytics lead | Which numbers go to leadership with a caveat |  |
-| Q6 | Which products bring first-time buyers, by channel, and do some entry products bring buyers who come back? | Merchandising / CRM | Which products to use as the entry offer in ads and bundles |  |
+| Q4 | Which campaigns bring leads that never buy? | Performance marketing / CRM manager | Which campaigns to pause or rework because they fill the CRM but not the sales |  |
+| Q5 | How much revenue per lead, per source? | Head of marketing and sales | How to split the budget across channels; cut channels that only bring cheap leads |  |
+| Extra | Can we trust these numbers? | Analytics lead | Which numbers go to leadership with a caveat |  |
 
 Metrics and data needed for each question:
 
 | # | Metric | Data needed |
 |---|---|---|
-| Q1 | Step-to-step conversion (sessions): session_start → view_item → add_to_cart → begin_checkout → add_shipping_info → add_payment_info → purchase. Cuts: device, new vs. returning | GA4 events |
-| Q2 | Revenue, orders, average order value, items per order, revenue per session. Cut: product category | GA4 purchase events + `items` |
+| Q1 | Buyer rate by channel: users who purchased ÷ users who arrived through the channel; share of buyers vs. share of visitors per channel (channel = the user's first source; the grouping rule is still open, §11) | GA4 traffic source + purchase events |
+| Q2 | Step-to-step conversion (sessions): session_start → view_item → add_to_cart → begin_checkout → add_shipping_info → add_payment_info → purchase. Cuts: device, new vs. returning | GA4 events |
 | Q3 | Median and distribution of days from first visit to first purchase | GA4 first_visit + purchase |
-| Q4 | Lead-to-buyer conversion rate; revenue per lead, by source; days from lead to purchase | Synthetic CRM leads + identity map + GA4 purchases |
-| Q5 | % sessions with unknown source; % purchases missing transaction_id, value, currency or items; duplicated transaction_ids; % leads with no match to a GA4 user | GA4 events + CRM leads |
-| Q6 | Share of first purchases by product/category and channel; repeat purchase rate by entry product; product matrix (views × view-to-purchase rate) | GA4 purchase + view_item events, `items` |
+| Q4 | Leads per campaign; never-buy rate by campaign: leads with no purchase within the data window ÷ all leads of the campaign | Synthetic CRM leads (campaign) + identity map + GA4 purchases |
+| Q5 | Revenue, orders, average order value, items per order, revenue per session. Cut: product category. Lead-to-buyer conversion rate; revenue per lead, by source; days from lead to purchase | GA4 purchase events + `items`; synthetic CRM leads + identity map |
+| Extra | % sessions with unknown source; % purchases missing transaction_id, value, currency or items; duplicated transaction_ids; % leads with no match to a GA4 user | GA4 events + CRM leads |
 
 ## 4. Capability map
 
@@ -79,19 +80,16 @@ Only the rules already in practice. More are added when the layers are designed.
 
 - **Q3, right censoring:** users who first visited in January had less time to buy, so time to purchase is biased
   downwards for late cohorts.
-- **Q4 and part of Q5, synthetic data:** the value of these questions is the pipeline (deduplication, identity),
+- **Q4, Q5 and part of the extra question, synthetic data:** the value of these questions is the pipeline (deduplication, identity),
   not the finding itself.
-- **Q6, repeat purchase may be too rare in 92 days:** if too few users have 2+ purchases, the deliverable is the analysis
-  design (metrics, model, query) with an explicit statement that the sample does not support a conclusion.
-  The entry-product share and the product matrix do not depend on repeat purchase and are always delivered.
-- **Q1, causes are out of reach:** the data shows *where* the funnel leaks, not *why* (no shipping cost or payment method data).
+- **Q2, causes are out of reach:** the data shows *where* the funnel leaks, not *why* (no shipping cost or payment method data).
 
 ## 8. Definitions (filled as decisions are made)
 
 | Term | Definition in this project | Decided in |
 |---|---|---|
 | Session | One distinct `user_pseudo_id` + `ga_session_id` pair | [Finding 1](architecture/dataset-findings.md#finding-1) |
-| Channel | | |
+| Channel | The user's first source (first touch), grouped into channels. The grouping rule (source / medium → channel) is written after F07–F10 | Decision log, 2026-11-23 |
 | Campaign | | |
 | Lead | | |
 | Buyer | | |
@@ -100,7 +98,7 @@ Only the rules already in practice. More are added when the layers are designed.
 
 ## 9. What "done" means
 
-1. Every question Q1–Q6 has a gold table and a chart, or a written reason why the data cannot answer it.
+1. Every question (Q1–Q5 and the extra one) has a gold table and a chart, or a written reason why the data cannot answer it.
 2. Every requirement in `specs/REQUIREMENTS.md` is `PASSING` or `WAIVED` with its reason.
 3. Every contested decision has an ADR, and every change of plan has a decision-log entry.
 4. Someone new to GA4 can read `docs/data-context.md` and explain the funnel numbers.
@@ -116,13 +114,13 @@ Only the rules already in practice. More are added when the layers are designed.
 
 ## 11. Open decisions
 
-- [ ] Channel: user-level first source vs. session-level source
+- [x] Channel: user-level first source (first touch), not session-level source. Decided 2026-11-23 (decision log)
+- [ ] Channel grouping rule: which source / medium pairs go into each channel (after F07–F10)
 - [ ] Where the analysis funnel starts, given that `view_item_list` is barely tracked ([Finding 2](architecture/dataset-findings.md#finding-2))
 - [ ] Funnel unit: user vs. session. The dataset overview uses users (did the user ever reach the step in 92 days).
-      The Q1 funnel also needs a session version (did this visit reach the step). Compare both before choosing the main one.
-- [ ] Why the product question (Q6) is core, with a fallback if repeat purchase is too rare
+      The Q2 funnel also needs a session version (did this visit reach the step). Compare both before choosing the main one.
 - [ ] Lead ↔ GA4 user identity strategy
-- [ ] Order grain vs. order-item grain in gold (Q6 needs one row per item, Q2 one row per order)
+- [ ] Order grain vs. order-item grain in gold
 
 ## 12. Reading order for a reviewer
 

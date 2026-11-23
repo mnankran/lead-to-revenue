@@ -68,7 +68,7 @@ One visit to the store: the group of events of the same user until they stop int
 30 minutes (or the day changes).
 - **In the data:** there is no session table. A session is the pair `user_pseudo_id` + `ga_session_id`
   (the second one is hidden inside `event_params`).
-- **Why it matters:** it's the base of the funnel (Q1). "Of 100 visits, how many reached checkout?"
+- **Why it matters:** it's the base of the funnel (Q2). "Of 100 visits, how many reached checkout?"
 
 ### First visit
 The first time a user appears on the site.
@@ -91,12 +91,12 @@ They usually come from **UTM parameters** in the link (`?utm_source=…&utm_medi
 A bucket that groups source and medium into something a marketing team talks about:
 Organic Search, Paid Search, Direct, Referral, Email, Social…
 - **In the data:** it doesn't exist as a column. We build it with rules.
-- **Why it matters:** it's the main cut of all six questions. **The exact rule is still open** (Decision Log).
+- **Why it matters:** it's the main cut of all the business questions. **Decided:** the channel is the user's first source (first touch). **Still open:** the grouping rule (which source / medium goes into each channel).
 
 ### Funnel and funnel step
 The ordered path to a purchase. In this project:
 `session_start → view_item → add_to_cart → begin_checkout → add_shipping_info → add_payment_info → purchase`.
-- **Why it matters:** comparing how many sessions reach each step shows where people give up (Q1).
+- **Why it matters:** comparing how many sessions reach each step shows where people give up (Q2).
 
 ### Transaction (order)
 One completed purchase.
@@ -106,12 +106,11 @@ One completed purchase.
 ### Item (product)
 A product inside an event. One order can have several items.
 - **In the data:** the `items` array (`item_id`, `item_name`, `item_category`, `price`, `quantity`).
-- **Why it matters:** product questions (Q6) need one row per item bought, not per order.
+- **Why it matters:** items per order and the product-category cut (Q5) are counted from this array.
 
-### Buyer, first purchase and entry product
+### Buyer and first purchase
 - **Buyer:** a user with at least one transaction.
 - **First purchase:** a buyer's earliest transaction.
-- **Entry product:** a product bought in that first purchase. "What brings people in?" (Q6)
 
 ### Lead
 A person who left their contact (email, phone) in a form. Leads live in the **CRM**, not in GA4.
@@ -122,7 +121,7 @@ A person who left their contact (email, phone) in a form. Leads live in the **CR
 ### Placeholders: `(not set)`, `(data deleted)`, `<Other>`
 - `(not set)`: GA4 didn't receive the value (e.g. a link without UTM).
 - `(data deleted)` and `<Other>`: values Google masked in this public sample.
-- **Why it matters:** they are not channels or products. They are measured, never hidden (Q5).
+- **Why it matters:** they are not channels or products. They are measured, never hidden (extra question).
 
 ### Project vocabulary
 - **Grain:** what one row of a table means ("one row = one order"). The first question about any table.
@@ -137,24 +136,23 @@ A person who left their contact (email, phone) in a form. Leads live in the **CR
 
 | Metric | Formula | Why we use it | Question |
 |---|---|---|---|
-| Sessions | Count of distinct `user_pseudo_id` + `ga_session_id` | The volume of visits; denominator of most rates | Q1, Q2 |
-| Step conversion rate | Sessions that reached step N ÷ sessions that reached step N−1 | Shows exactly where people give up | Q1 |
-| Session conversion rate | Sessions with a purchase ÷ all sessions | One number to compare channels | Q1 |
-| Revenue | Sum of `purchase_revenue_in_usd` over distinct transactions | What the channel brings in money | Q2 |
-| Orders | Count of distinct `transaction_id` | Volume of purchases, without duplicates | Q2 |
-| Average order value (AOV) | Revenue ÷ orders | A small channel with a high AOV can be worth more than a big one | Q2 |
-| Revenue per session | Revenue ÷ sessions | Joins volume and value in one number | Q2 |
-| Items per order | Items bought ÷ orders | Shows whether people buy one thing or a basket | Q2 |
+| Sessions | Count of distinct `user_pseudo_id` + `ga_session_id` | The volume of visits; denominator of most rates | Q2, Q5 |
+| Step conversion rate | Sessions that reached step N ÷ sessions that reached step N−1 | Shows exactly where people give up | Q2 |
+| Session conversion rate | Sessions with a purchase ÷ all sessions | One number to compare channels | Q2 |
+| Buyer rate | Users who purchased ÷ all users, by channel | Separates channels that bring traffic from channels that bring buyers | Q1 |
+| Revenue | Sum of `purchase_revenue_in_usd` over distinct transactions | What the channel brings in money | Q5 |
+| Orders | Count of distinct `transaction_id` | Volume of purchases, without duplicates | Q5 |
+| Average order value (AOV) | Revenue ÷ orders | A small channel with a high AOV can be worth more than a big one | Q5 |
+| Revenue per session | Revenue ÷ sessions | Joins volume and value in one number | Q5 |
+| Items per order | Items bought ÷ orders | Shows whether people buy one thing or a basket | Q5 |
 | Time to first purchase | Days between `first_visit` and first purchase. We report the **median** | How long nurturing should last. Median because a few very slow buyers would distort the average | Q3 |
-| Lead-to-buyer rate | Leads that became buyers ÷ all leads | The central question: channels that bring buyers, not just leads | Q4 |
-| Days from lead to purchase | Days between lead creation and first purchase (median) | Same logic as Q3, starting from the lead | Q4 |
-| Unknown source share | Sessions with `(not set)`, `(data deleted)` or `<Other>` source ÷ all sessions | How much of the traffic we can't attribute | Q5 |
-| Incomplete purchase share | Purchases missing `transaction_id`, value, currency or items ÷ all purchases | How much of the revenue we can trust | Q5 |
-| Duplicate transactions | Transaction ids recorded in more than one purchase event | Duplicates inflate revenue | Q5 |
-| Identity match rate | Leads matched to a GA4 user ÷ all leads | Below a threshold, Q4 isn't reliable | Q4, Q5 |
-| Entry product share | First purchases containing product X ÷ all first purchases | Which products bring people in | Q6 |
-| Repeat purchase rate | Buyers with 2+ orders ÷ all buyers | Whether customers come back. **If too low, Q6 reports "not enough data"** | Q6 |
-| View-to-purchase rate | Times a product was bought ÷ times it was viewed | Builds the product matrix (much viewed and little bought, and so on) | Q6 |
+| Lead-to-buyer rate | Leads that became buyers ÷ all leads | The central question: channels that bring buyers, not just leads | Q4, Q5 |
+| Never-buy rate | Leads with no purchase within the data window ÷ all leads, by campaign | Shows campaigns that fill the CRM but not the sales. "Never" means "not within the 92 days" | Q4 |
+| Days from lead to purchase | Days between lead creation and first purchase (median) | Same logic as Q3, starting from the lead | Q5 |
+| Unknown source share | Sessions with `(not set)`, `(data deleted)` or `<Other>` source ÷ all sessions | How much of the traffic we can't attribute | Extra |
+| Incomplete purchase share | Purchases missing `transaction_id`, value, currency or items ÷ all purchases | How much of the revenue we can trust | Extra |
+| Duplicate transactions | Transaction ids recorded in more than one purchase event | Duplicates inflate revenue | Extra |
+| Identity match rate | Leads matched to a GA4 user ÷ all leads | Below a threshold, Q4 and Q5 aren't reliable | Q4, Q5, Extra |
 
 ---
 
@@ -207,7 +205,7 @@ Query: `sql/exploration/facts_01_scope.sql`
 | Funnel 7 | `add_payment_info` | The user filled in payment |
 | Funnel 8 | `purchase` | The order was completed |
 
-**Reading:** every step of the purchase funnel is tracked, including shipping and payment, so Q1 can show
+**Reading:** every step of the purchase funnel is tracked, including shipping and payment, so Q2 can show
 exactly where people drop off. There is no lead event (`generate_lead`, `sign_up`, `login`): GA4 here has no leads,
 which is why the project adds a CRM leads table. There is no `refund` or `remove_from_cart`, so revenue is gross
 and cart abandonment can only be seen as "added but never bought". Event counts are in [5.3 Funnel](#53-funnel).
@@ -310,7 +308,6 @@ Query: `sql/exploration/facts_05_products.sql`
 |---|---|---|
 | F19 | Distinct products / categories | — / — |
 | F20 | Items bought with no category | — % |
-| F21 | Distinct products in first purchases | — |
 
 **Top 10 products by revenue**
 
@@ -337,10 +334,10 @@ Query: `sql/exploration/facts_06_leads.sql`
 ## 6. Limitations: what this data cannot tell us
 
 - **No cost data:** no CAC, no ROAS.
-- **92 days only:** time to purchase is biased for users who arrived late; repeat purchase may be too rare (Q6).
+- **92 days only:** time to purchase is biased for users who arrived late.
 - **Obfuscated values:** part of sources, campaigns and products are masked.
 - **Users are not people:** cross-device journeys are split into different users.
-- **Leads are synthetic:** Q4 tests the pipeline, not a real market.
+- **Leads are synthetic:** Q4 and Q5 test the pipeline, not a real market.
 - **List views barely tracked:** only 44 users have `view_item_list`, so the funnel can't start at the category page.
 - **Where, not why:** the funnel shows where people give up, not the reason (no shipping or payment data).
 
@@ -350,7 +347,7 @@ When a surprise changes a decision, it also becomes a numbered finding in
 [architecture/dataset-findings.md](architecture/dataset-findings.md), with what changed.
 
 <!-- Date + fact + one line. Example:
-     2026-11-28 · F14 · 40% of purchases have transaction_id "(not set)". Q2 needs a rule for that. -->
+     2026-11-28 · F14 · 40% of purchases have transaction_id "(not set)". Q5 needs a rule for that. -->
 
 - 2026-11-23 · F05 · 3,038 users (1.1%) never fired `session_start`. Sessions must be counted by the key, not by that event.
   Cause not known yet. Hypotheses: (a) their session started on 2020-10-31, before the sample begins;

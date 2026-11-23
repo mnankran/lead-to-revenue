@@ -33,7 +33,7 @@ Not yet checked.
 
 **What changed.** A session is defined as a distinct `user_pseudo_id` + `ga_session_id` pair, not as a
 `session_start` event ([north star §8](../00-north-star.md#8-definitions-filled-as-decisions-are-made)).
-The gap itself is a data-quality fact for Q5.
+The gap itself is a data-quality fact for the extra question (data trust).
 
 ---
 

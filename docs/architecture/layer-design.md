@@ -28,7 +28,7 @@ and how the layers connect. Take a photo of the drawing and save it in `docs/arc
 
 ## Gold — star schema for the funnel
 
-| Table | Type (fact / dimension) | Grain (1 row = ...) | Answers which question (Q1–Q6) |
+| Table | Type (fact / dimension) | Grain (1 row = ...) | Answers which question (Q1–Q5, Extra) |
 |---|---|---|---|
 | | | | |
 

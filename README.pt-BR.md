@@ -44,7 +44,7 @@ cada número aponta para a query que o produziu, e cada decisão fica registrada
 
 ## Ordem de leitura
 
-1. [docs/00-north-star.md](docs/00-north-star.md): as seis perguntas e as decisões que elas apoiam
+1. [docs/00-north-star.md](docs/00-north-star.md): as cinco perguntas (e a extra, sobre confiança nos dados) e as decisões que elas apoiam
 2. [docs/data-context.md](docs/data-context.md): o dataset explicado para quem nunca viu GA4
 3. [docs/architecture/dataset-findings.md](docs/architecture/dataset-findings.md): os achados que mudaram o plano
 4. [specs/REQUIREMENTS.md](specs/REQUIREMENTS.md) e [specs/traceability.md](specs/traceability.md)

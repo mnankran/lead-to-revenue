@@ -58,7 +58,7 @@
 
 
 -- -----------------------------------------------------------------------------
--- F18 · Repeat buyers — decides Q6
+-- F18 · Repeat buyers
 -- Question: How many users have 2 or more distinct transactions?
 -- Decide what to do with "(not set)" transaction ids before counting. That choice is a Decision Log entry.
 -- Finding:
