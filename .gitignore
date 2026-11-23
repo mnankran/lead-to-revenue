@@ -1,0 +1,23 @@
+# Credentials: a service account key in a public repo gives anyone access to the cloud project.
+*.json.key
+service-account*.json
+.env
+
+# Data: nothing is committed (see data/README.md). Raw files are large and some may hold personal data.
+*.csv
+*.parquet
+data/*
+!data/README.md
+
+# Python: generated files, rebuilt on every run.
+__pycache__/
+.venv/
+.ipynb_checkpoints/
+
+# dbt (from Feb/2027): build output, recreated by `dbt run`.
+target/
+dbt_packages/
+logs/
+
+# OS
+.DS_Store
